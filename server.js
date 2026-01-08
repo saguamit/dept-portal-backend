@@ -180,27 +180,28 @@ app.post(
         ? "/uploads/mentors/" + req.files.mentor_photo[0].filename
         : null;
 
-      await db.query(
-        `
-        INSERT INTO class_semester_info
-        (class_name, semester, section, academic_year,
-         mentor_name, designation, contact,
-         timetable_link, syllabus_link, mentor_photo)
-        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
-        `,
-        [
-          class_name?.trim(),
-          semester,
-          section?.trim() || "",
-          academic_year?.trim(),
-          mentor_name?.trim(),
-          designation?.trim(),
-          contact?.trim(),
-          timetable_link?.trim(),
-          syllabusPath,
-          photoPath
-        ]
-      );
+     await db.query(
+  `
+  INSERT INTO public.class_semester_info
+  (class_name, semester, section, academic_year,
+   mentor_name, designation, contact,
+   timetable_link, syllabus_link, mentor_photo)
+  VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
+  `,
+  [
+    String(class_name || "").trim(),
+    Number(semester),
+    String(section || "").trim(),
+    String(academic_year || "").trim(),
+    String(mentor_name || "").trim(),
+    String(designation || "").trim(),
+    String(contact || "").trim(),
+    timetable_link ? String(timetable_link).trim() : null,
+    syllabusPath,
+    photoPath
+  ]
+);
+
 
       res.json({ message: "Record added successfully" });
     } catch (err) {
@@ -293,3 +294,4 @@ app.delete("/api/admin/delete/:id", async (req, res) => {
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });
+
