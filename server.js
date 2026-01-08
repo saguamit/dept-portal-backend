@@ -18,13 +18,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // ---------- MySQL Connection ----------
-const db = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASS,
-  database: process.env.DB_NAME,
-  port: process.env.DB_PORT
-});
+const db = mysql.createConnection(process.env.DATABASE_URL);
+
 
 db.connect(err => {
   if (err) {
@@ -279,3 +274,4 @@ app.delete("/api/admin/delete/:id", (req, res) => {
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });
+
